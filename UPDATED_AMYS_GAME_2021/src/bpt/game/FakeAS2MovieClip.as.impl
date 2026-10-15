@@ -1,0 +1,241 @@
+		public function GetDisplayObject():DisplayObject
+		{
+			return this;
+		}
+		
+		public function get _parent():DisplayObjectContainer { return parent; }
+		
+		public function set _parent( value:DisplayObjectContainer ):void
+		{
+			if ( _parent ) _parent.removeChild( this );
+			if ( value ) value.addChild( this );
+		}
+		
+		/*
+		public function get _xmouse():Number { return 0; } // Math.random() * 100; } // this.mouseX; }
+		public function get _ymouse():Number { return 0; } // Math.random() * 100; } // this.mouseY; }
+		*/
+		
+		public function get _name():String { return this.name; }
+		public function set _name( value:String ):void { this.name = value; }
+		
+		private var onEnterFrame_:onEnterFrame_Ref = null;
+		
+		public function get onEnterFrame():onEnterFrame_Ref
+		{
+			return onEnterFrame_;
+		}
+		
+		/*
+		private function DetermineCallability( d:DisplayObject ):Boolean
+		{
+			do {
+				
+				if ( !d.visible ) return false;
+				
+				d = d.parent;
+				
+			} while ( d );
+			
+			return true;
+		}
+		*/
+		
+		public function callClosure_( e ):void
+		{
+			if ( (null != onEnterFrame_) && (null != onEnterFrame_.code) && (null != onEnterFrame_.mc) )
+			{
+				if ( parent /* && _parent */ )
+				{
+					onEnterFrame_.code.call( e );
+				}
+			}
+			/*
+			else
+			{
+				 if (Capabilities.isDebugger) trace( "calling closure after it should be long gone?" );
+			}
+			*/
+		}
+		
+		public function set onEnterFrame( value:onEnterFrame_Ref ):void
+		{
+			if ( value == onEnterFrame_ ) return;
+		
+			if ( null != onEnterFrame_ )
+			{
+				//trace( "removing " + onEnterFrame_.mc._name + ".enterFrame" );				
+				
+				onEnterFrame_.code = null;
+				onEnterFrame_.mc = null;
+				
+				StarlingGameRoot.REMOVE_ENTER_FRAME_LISTENER( this );
+				
+				Allocator.Release( onEnterFrame_ );
+			}
+			
+			onEnterFrame_ = value;
+			
+			if ( null != onEnterFrame_ )
+			{
+				onEnterFrame_.mc = this;
+				
+				StarlingGameRoot.REGISTER_ENTER_FRAME_LISTENER( this );
+				
+				//trace( "adding '" + onEnterFrame_.mc + "'.enterFrame" );
+			}
+		}
+		
+		// ********************************************************************
+		
+		private var _visible_:Boolean = true;
+		
+		public function get _visible():Boolean { return _visible_; }
+		
+		public function set _visible( value:Boolean ):void
+		{
+			if ( value != _visible_ )
+			{
+				_visible_ = value;
+				
+				this.visible = _visible_;
+			}
+		}
+		
+		// ----------------
+		
+		private var _x_:Number /*int*/ = 0;
+		public function get _x():Number { return _x_; }
+		
+		public function set _x( value:Number ):void
+		{
+			if ( value != _x_ )
+			{
+				_x_ = value;
+				
+				this.x = _x_;
+			}
+		}
+		
+		// ----------------
+		
+		private var _y_:Number /*int*/ = 0;
+		public function get _y():Number { return _y_; }
+		
+		public function set _y( value:Number ):void
+		{
+			if ( value != _y_ )
+			{
+				_y_ = value;
+				
+				this.y = _y_;
+			}
+		}
+		
+		// ----------------
+		
+		private var _xscale_:Number = 100;
+		public function get _xscale():Number { return _xscale_; }
+		
+		public function set _xscale( value:Number ):void
+		{
+			var t:Number = finalize_X_scale( value * 0.01 ); // / 100.0 );
+		
+			if ( (value != _xscale_) || (t != this.scaleX) )
+			{
+				_xscale_ = value;
+				this.scaleX = t;
+			}
+		}
+		
+		// ----------------
+		
+		private var _yscale_:Number = 100;
+		public function get _yscale():Number { return _yscale_; }
+		public function set _yscale( value:Number ):void
+		{
+			var t:Number = finalize_Y_scale( value * 0.01 ); // / 100.0 );
+			
+			if ( (value != _yscale_) || (t != this.scaleY) )
+			{
+				_yscale_ = value;
+				this.scaleY = t;
+			}
+		}
+		
+		// ----------------
+		
+		public function get _width():Number { return this.width; }
+		public function get _height():Number { return this.height; }
+		
+		// ----------------
+		
+		private var _rotation_:Number = 0;
+		public function get _rotation():Number { return _rotation_; }
+		
+		public function set _rotation( value:Number ):void
+		{
+			if ( value != _rotation_ )
+			{
+				_rotation_ = value;
+				this.rotation = _rotation_;
+			}
+		}
+		
+		// ----------------
+		
+		private var _alpha_:Number = 100;
+		public function get _alpha():Number { return _alpha_; }
+		
+		public function set _alpha( value:Number ):void
+		{
+			if ( value != _alpha_ )
+			{
+				_alpha_ = value;
+				this.alpha = _alpha_ / 100.0;
+			}
+		}
+		
+		/*
+		public function play():void
+		{
+		}
+		
+		public function stop():void
+		{
+		}
+		
+		public function gotoAndStop( frame:String ):void
+		{
+		}
+		
+		public function gotoAndPlay( frame:String ):void
+		{
+		}
+		
+		public function changeToHighestDepth():void
+		{
+			if ( !_parent ) return;
+			
+			if ( _parent.contains( this ) )
+			{
+				var p:DisplayObjectContainer = _parent;
+				p.removeChild( this );
+				p.addChild( this );
+			}
+		}
+		
+		// ----------------
+		
+		private var _currentFrame_:int = 0;
+		public function get _currentFrame():int { return _currentFrame_; }
+		public function set _currentFrame( value:int ):void { _currentFrame_ = value; }
+		
+		// ----------------
+		
+		private var _totalFrames_:int = 0;
+		public function get _totalFrames():int { return _totalFrames_; }
+		public function set _totalFrames( value:int ):void { _totalFrames_ = value; }
+		
+		*/
+		

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<application xmlns="http://ns.adobe.com/air/application/14.0">
+  <id>AGUpdatedStarling</id>
+  <versionNumber>1.0</versionNumber>
+  <filename>AGUpdatedStarling</filename>
+  <name>AGUpdatedStarling</name>
+  <initialWindow>
+    <title>AGUpdatedStarling</title>
+    <content>AGUpdatedStarling.swf</content>
+    <systemChrome>standard</systemChrome>
+    <transparent>false</transparent>
+    <visible>true</visible>
+    <minimizable>true</minimizable>
+    <maximizable>false</maximizable>
+    <resizable>false</resizable>
+	<renderMode>direct</renderMode>
+  </initialWindow>
+  <!-- 
+	More options:
+	http://livedocs.adobe.com/flex/3/html/File_formats_1.html#1043413
+	-->
+  <supportedProfiles>desktop mobileDevice</supportedProfiles>
+</application>
